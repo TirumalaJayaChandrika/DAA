@@ -49,3 +49,8 @@ int main()
     
     return 0;
 }
+
+output:
+
+seq - c a e 
+work - 142

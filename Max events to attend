@@ -1,0 +1,95 @@
+void sort(int** events, int eventsSize){
+    for(int i = 0; i < eventsSize; i++){
+        for(int j = i+1; j < eventsSize; j++){
+            if(events[i][1]>events[j][1]){
+                int temp = events[i][0];
+                events[i][0] = events[j][0];
+                events[j][0] = temp;
+                temp = events[i][1];
+                events[i][1] = events[j][1];
+                events[j][1] = temp;
+            }
+            else if(events[i][1] == events[j][1]){
+                if(events[i][0]>events[j][0]){
+                int temp = events[i][0];
+                events[i][0] = events[j][0];
+                events[j][0] = temp;
+                temp = events[i][1];
+                events[i][1] = events[j][1];
+                events[j][1] = temp;
+            }
+            }
+        }
+    }
+} 
+void merge(int** a,int l,int m,int r){
+    int n1=m-l+1,n2=r-m;
+    int i=0,j=0,k=0;
+    int left[n1][2],right[n2][2];
+    for(int i=0;i<n1;i++){
+        left[i][0]=a[l+i][0];
+        left[i][1] = a[l+i][1];
+    }
+    for(int j=0;j<n2;j++ ){
+        right[j][0]=a[m+1+j][0];
+        right[j][1]=a[m+1+j][1];
+    }
+    i=0,j=0,k=l;
+    while(i<n1 && j<n2){
+        if(left[i][1]>right[j][1]){
+            a[k][0]=right[j][0];
+            a[k][1]=right[j][1];
+            j++;
+        }else{
+            a[k][0]=left[i][0];
+            a[k][1]=left[i][1];
+            i++;
+        }
+        k++;
+    }
+    while(i < n1){
+        a[k][0]=left[i][0];
+        a[k][1]=left[i][1];
+        k++;i++;
+    }
+    while(j<n2){
+        a[k][0]=right[j][0];
+        a[k][1]=right[j][1];
+        j++;k++;
+    }
+
+}
+void mergesort(int** a,int l,int r){
+    
+    if(l<r){
+        int m=(r+l)/2;
+        mergesort(a,l,m);
+        mergesort(a,m+1,r);
+        merge(a,l,m,r);
+
+    }
+
+}
+int maxEvents(int** events, int eventsSize, int* eventsColSize){
+    
+    mergesort(events, 0, eventsSize-1);
+    int c = 0, max = events[eventsSize - 1][1], MAX = 100000;
+    int a[MAX];
+    for(int i=0; i < MAX; i++){
+        a[i] = 0;
+    }
+    
+    for( int i=0 ;i<eventsSize; i++){
+        for(int j = events[i][0]; j <= events[i][1]; j++){
+            if(a[j] == 0){
+                a[j] = 1;
+                break;
+            }
+        } 
+    }
+    for(int i=0; i < MAX; i++){
+        if(a[i] == 1)
+            c+=1;
+    }
+    return c;
+}

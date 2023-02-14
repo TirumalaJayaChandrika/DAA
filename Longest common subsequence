@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include<string.h>
+int max(int a, int b){ return a>b ? a : b;}
+int longestCommonSubsequence(char * text1, char * text2){
+    int l1 = strlen(text1), l2 = strlen(text2);
+    int a[l1+1][l2+1];
+    for(int i =0 ;i <= l1; i++){
+        a[i][0] = 0;
+    }
+    for(int i =0 ;i <= l2; i++){
+        
+        a[0][i] = 0;
+    }
+    for(int i =1 ;i <= l1; i++){
+        for(int j = 1; j<= l2; j++){
+            if(text1[i-1] == text2[j-1]){
+                a[i][j] = a[i-1][j-1]+1;
+            }else{
+                a[i][j] = max(a[i-1][j], a[i][j-1]);
+            }
+        }
+    }
+    
+    return a[l1][l2];
+}
+void main(){
+    char s1[]= "longest", s2[]="stone";
+    printf("length of lst is: %d",longestCommonSubsequence(s2,s1));
+
+}

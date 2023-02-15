@@ -1,0 +1,96 @@
+#include<stdio.h>
+#include<stdbool.h>
+#include<string.h>
+
+int n ;
+
+void printSol(int board[n][n]){
+    for(int i =0 ; i < n; i++){
+        for(int j = 0; j < n; j++){
+            printf("%d ",board[i][j]);
+        }
+        printf("\n");
+    }
+}
+bool isSafe(int row, int col, int upslashcode[n][n], int downslashcode[n][n], int rowlookup[n], int upslashlookup[], int downslashlookup[]){
+    if(upslashlookup[upslashcode[row][col]] || downslashlookup[downslashcode[row][col]] || rowlookup[row]){
+        return false;
+    }
+    return true;
+}
+
+
+bool solveNqueensdetail(int board[n][n], int col,int upslashcode[n][n], int downslashcode[n][n],int rowlookup[n], int upslashlookup[], int downslashlookup[]){
+    if(col >= n)
+    return true;
+    for(int i = 0;  i < n;i++){
+        if(isSafe(i, col, upslashcode, downslashcode, rowlookup, upslashlookup, downslashlookup)){
+            board[i][col] = 1;
+            rowlookup[i] = 1;
+            upslashlookup[upslashcode[i][col]] =1;
+            downslashlookup[downslashcode[i][col]] = 1;
+            if(solveNqueensdetail(board, col+1,upslashcode, downslashcode, rowlookup, upslashlookup, downslashlookup)){
+                return true;
+            }
+            board[i][col] = 0;
+            rowlookup[i] = 0;
+            upslashlookup[upslashcode[i][col]] = 0;
+            downslashlookup[downslashcode[i][col]] = 0;
+        }   
+    }
+    return false;
+}
+bool solveNqueens(){
+    int board[n][n];
+    memset(board, 0, sizeof board);
+    int upslashcode[n][n];
+    int downslashcode[n][n];
+    int rowlookup[n];
+    memset(rowlookup, 0, sizeof(rowlookup));
+    int upslashlookup[2*n - 1];
+    memset(upslashlookup, 0, sizeof(upslashlookup));
+    int downslashlookup[2*n - 1] ;
+    memset(downslashlookup, 0, sizeof(downslashlookup));
+    // for(int j = 0; j < 2*n-1; j++){
+
+    //         printf("%d ",downslashlookup[j]);
+    //     }
+    //     printf("\n");
+    //     for(int j = 0; j < 2*n-1; j++){
+    //         printf("%d ",upslashlookup[j]);
+    //     }
+    for(int r = 0; r < n; r++){
+        for(int c = 0; c < n; c++){
+            upslashcode[r][c] = r+c;
+            downslashcode[r][c] = n-1+r-c;
+        }
+    }
+    // for(int i =0 ; i < n; i++){
+    //     for(int j = 0; j < n; j++){
+    //         printf("%d ",upslashcode[i][j]);
+    //     }
+    //     printf("\n");
+    // }
+    // for(int i =0 ; i < n; i++){
+    //     for(int j = 0; j < n; j++){
+    //         printf("%d ",downslashcode[i][j]);
+    //     }
+    //     printf("\n");
+    // }
+    
+    if(solveNqueensdetail(board, 0,upslashcode, downslashcode, rowlookup, upslashlookup, downslashlookup)== false){
+
+    
+        printf("no solution");
+         printSol(board);
+        return false;
+    }
+    printSol(board);
+    return true;
+
+}
+void main(){
+    printf("enter n");
+    scanf("%d",&n);
+    solveNqueens();
+}
